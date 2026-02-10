@@ -1,0 +1,366 @@
+---
+title: Ejercicio Access: Impresión 3D & El Reto SQL
+---
+
+<h1>Ejercicio de Access</h1>
+<p>Ejercicio planteado para alumnado de 1º SMR</p>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio Access: Impresión 3D & El Reto SQL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .benchy-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(720deg); }
+        }
+
+        .hidden-prize {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+        
+        .show-prize {
+            display: flex;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white shadow-lg">
+        <div class="max-w-5xl mx-auto px-6 py-8">
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <div>
+                    <h1 class="text-3xl font-extrabold tracking-tight">Ejercicio Práctico: Microsoft Access</h1>
+                    <p class="mt-2 text-indigo-100 text-lg">Sistema de Gestión de "Mundo 3D"</p>
+                </div>
+                <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm text-center">
+                    <span class="block text-xs uppercase tracking-wider font-semibold opacity-70">Premio del Reto</span>
+                    <span class="block text-xl font-bold">🏆 #3DBenchy</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-10 space-y-12">
+
+        <!-- Contexto -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+            <h2 class="text-2xl font-bold text-slate-900 mb-4 flex items-center">
+                <span class="bg-indigo-100 text-indigo-600 p-2 rounded-lg mr-3">📝</span> 
+                Contexto del Ejercicio
+            </h2>
+            <p class="text-slate-600 leading-relaxed">
+                Eres el administrador de <strong>"Mundo 3D"</strong>, una pequeña empresa que vende filamentos e impresoras 3D y realiza servicios de impresión bajo demanda. Necesitas crear una base de datos en Access para gestionar tus clientes y los pedidos que realizan.
+            </p>
+        </section>
+
+        <!-- Parte 1: Tablas -->
+        <section class="space-y-6">
+            <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-indigo-500 pl-4">1. Diseño de Tablas</h2>
+            <p class="text-slate-600">Crea una base de datos en blanco y diseña las siguientes tablas con sus tipos de datos y claves correspondientes.</p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Tabla Clientes -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+                        <h3 class="font-bold text-lg">Tabla: Clientes</h3>
+                        <span class="text-xs font-mono bg-slate-200 text-slate-600 px-2 py-1 rounded">TBL_Clientes</span>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex justify-between border-b pb-2">
+                                <span class="font-mono text-indigo-600 font-bold">ID_Cliente</span>
+                                <span class="text-slate-500">Autonumérico (Clave Principal)</span>
+                            </li>
+                            <li class="flex justify-between border-b pb-2">
+                                <span class="font-mono text-indigo-600">Nombre</span>
+                                <span class="text-slate-500">Texto Corto (50)</span>
+                            </li>
+                            <li class="flex justify-between border-b pb-2">
+                                <span class="font-mono text-indigo-600">Apellidos</span>
+                                <span class="text-slate-500">Texto Corto (100)</span>
+                            </li>
+                            <li class="flex justify-between border-b pb-2">
+                                <span class="font-mono text-indigo-600">Email</span>
+                                <span class="text-slate-500">Texto Corto (Formato email)</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span class="font-mono text-indigo-600">Ciudad</span>
+                                <span class="text-slate-500">Texto Corto</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tabla Pedidos -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+                        <h3 class="font-bold text-lg">Tabla: Pedidos</h3>
+                        <span class="text-xs font-mono bg-slate-200 text-slate-600 px-2 py-1 rounded">TBL_Pedidos</span>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex justify-between border-b pb-2">
+                                <span class="font-mono text-indigo-600 font-bold">ID_Pedido</span>
+                                <span class="text-slate-500">Autonumérico (Clave Principal)</span>
+                            </li>
+                            <li class="flex justify-between border-b pb-2">
+                                <span class="font-mono text-indigo-600">ID_Cliente</span>
+                                <span class="text-slate-500">Número (Clave Foránea)</span>
+                            </li>
+                            <li class="flex justify-between border-b pb-2">
+                                <span class="font-mono text-indigo-600">Fecha_Pedido</span>
+                                <span class="text-slate-500">Fecha/Hora</span>
+                            </li>
+                            <li class="flex justify-between border-b pb-2">
+                                <span class="font-mono text-indigo-600">Material</span>
+                                <span class="text-slate-500">Texto (PLA, PETG, ABS)</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span class="font-mono text-indigo-600">Precio_Total</span>
+                                <span class="text-slate-500">Moneda</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r">
+                <p class="text-blue-700 text-sm">
+                    <strong>💡 Tarea de Relaciones:</strong> Ve a "Herramientas de base de datos" > "Relaciones" y conecta el campo <code class="font-mono bg-blue-100 px-1 rounded">ID_Cliente</code> de ambas tablas. Asegúrate de marcar "Exigir integridad referencial".
+                </p>
+            </div>
+        </section>
+
+        <!-- Parte 2: Formularios y Consultas -->
+        <section class="space-y-6">
+            <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-indigo-500 pl-4">2. Formularios y Consultas</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Tarea Formularios -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-lg mb-3 flex items-center">
+                        <span class="bg-purple-100 text-purple-600 p-1.5 rounded mr-2 text-sm">Formularios</span>
+                        Interfaz de Usuario
+                    </h3>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600 text-sm">
+                        <li>Crea un formulario llamado <strong>"Nuevo Cliente"</strong> usando el asistente. Debe tener un diseño columnar.</li>
+                        <li>Crea un formulario llamado <strong>"Gestión Pedidos"</strong>. Debe incluir un subformulario para ver los pedidos asociados a cada cliente.</li>
+                        <li>Añade botones de navegación (Siguiente, Anterior, Guardar) en el pie del formulario.</li>
+                    </ul>
+                </div>
+
+                <!-- Tarea Consultas -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-lg mb-3 flex items-center">
+                        <span class="bg-green-100 text-green-600 p-1.5 rounded mr-2 text-sm">Consultas</span>
+                        Análisis de Datos
+                    </h3>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600 text-sm">
+                        <li><strong>Consulta 1 (Básica):</strong> Muestra todos los clientes de la ciudad "Madrid".</li>
+                        <li><strong>Consulta 2 (Cálculo):</strong> Muestra los pedidos de material "PLA" cuyo precio sea superior a 20€.</li>
+                        <li><strong>Consulta 3 (Parámetros):</strong> Crea una consulta que, al ejecutarla, pregunte al usuario "¿Qué material quieres buscar?" y muestre los resultados.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Parte 3: EL RETO DEL BENCHY (SQL) -->
+        <section class="mt-12 relative" id="sql-challenge">
+            <div class="absolute -top-6 -right-6 hidden md:block opacity-20 pointer-events-none">
+                <svg width="150" height="150" viewBox="0 0 24 24" fill="currentColor" class="text-indigo-900">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+                </svg>
+            </div>
+
+            <div class="bg-gradient-to-r from-slate-900 to-indigo-900 rounded-2xl shadow-2xl p-8 md:p-12 text-center text-white relative overflow-hidden">
+                
+                <!-- Challenge Header -->
+                <div class="relative z-10">
+                    <h2 class="text-3xl md:text-4xl font-extrabold mb-4 flex items-center justify-center gap-3">
+                        <span>⚡ RETO SQL: GANA EL BENCHY</span>
+                    </h2>
+                    <p class="text-indigo-200 max-w-2xl mx-auto text-lg mb-8">
+                        Tu jefe necesita un reporte urgente y el asistente de consultas de Access se ha bloqueado. Solo puedes usar SQL directo.
+                    </p>
+
+                    <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 mb-8 text-left border border-white/20 max-w-2xl mx-auto">
+                        <h4 class="text-yellow-400 font-bold uppercase tracking-wider text-xs mb-2">Misión:</h4>
+                        <p class="font-mono text-lg mb-4">
+                            Selecciona el <span class="text-pink-400">Nombre</span> de la tabla <span class="text-pink-400">TBL_Clientes</span> donde la <span class="text-pink-400">Ciudad</span> sea exactamente igual a <span class="text-green-400">'Valencia'</span>.
+                        </p>
+                        <p class="text-sm text-slate-300 italic">Pista: Usa SELECT, FROM y WHERE. Cuidado con las comillas simples para el texto.</p>
+                    </div>
+
+                    <!-- SQL Editor Simulation -->
+                    <div class="max-w-2xl mx-auto relative">
+                        <div class="absolute top-0 left-0 w-full h-8 bg-slate-800 rounded-t-lg flex items-center px-4 gap-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            <span class="text-xs text-slate-400 ml-2">SQL Query Editor</span>
+                        </div>
+                        <textarea id="sqlInput" spellcheck="false" class="w-full h-32 bg-slate-950 text-green-400 font-mono p-4 pt-10 rounded-lg border-2 border-slate-700 focus:border-green-500 focus:outline-none shadow-inner resize-none text-base" placeholder="Escribe tu consulta SQL aquí..."></textarea>
+                    </div>
+
+                    <button onclick="checkSQL()" class="mt-6 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition hover:scale-105 active:scale-95 text-lg">
+                        Ejecutar Consulta ▶
+                    </button>
+                    
+                    <p id="feedback" class="mt-4 font-bold text-red-400 h-6"></p>
+                </div>
+            </div>
+
+            <!-- THE PRIZE (Hidden by default) -->
+            <div id="prizeSection" class="hidden-prize fixed inset-0 z-50 bg-black/90 flex-col items-center justify-center text-center p-4 backdrop-blur-sm">
+                
+                <h2 class="text-4xl md:text-6xl font-extrabold text-white mb-6 animate-bounce">¡CORRECTO!</h2>
+                <p class="text-xl text-green-300 mb-8">Has desbloqueado el Benchy Dorado</p>
+                
+                <!-- CSS Benchy Representation (Simplified Boat SVG) -->
+                <div class="benchy-float mb-8 relative">
+                    <svg width="200" height="200" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Hull -->
+                        <path d="M15 65 C 15 85, 85 85, 85 65 L 90 55 L 10 55 Z" fill="#FBBF24" stroke="#D97706" stroke-width="2"/>
+                        <!-- Cabin -->
+                        <rect x="30" y="35" width="40" height="20" fill="#FCD34D" stroke="#D97706" stroke-width="2"/>
+                        <!-- Roof -->
+                        <path d="M25 35 L 75 35 L 70 25 L 30 25 Z" fill="#F59E0B" stroke="#D97706" stroke-width="2"/>
+                        <!-- Chimney -->
+                        <rect x="55" y="10" width="10" height="15" fill="#FCD34D" stroke="#D97706" stroke-width="2"/>
+                        <!-- Details -->
+                        <circle cx="40" cy="45" r="5" fill="#FFF" opacity="0.8"/>
+                        <circle cx="60" cy="45" r="5" fill="#FFF" opacity="0.8"/>
+                    </svg>
+                    <!-- Sparkles -->
+                    <div class="absolute top-0 right-0 text-yellow-300 text-2xl animate-pulse">✨</div>
+                    <div class="absolute bottom-10 left-0 text-yellow-300 text-xl animate-pulse" style="animation-delay: 0.5s">✨</div>
+                </div>
+
+                <div class="bg-white/10 p-6 rounded-xl border border-white/20 max-w-md">
+                    <p class="text-white mb-4">Código de canje:</p>
+                    <code class="bg-black/50 p-2 rounded text-green-400 font-mono text-xl select-all">SELECT_MASTER_BENCHY</code>
+                    <p class="text-xs text-slate-400 mt-4">* Muestra esta pantalla al profesor para reclamar tu impresión.</p>
+                </div>
+
+                <button onclick="closePrize()" class="mt-8 text-white underline hover:text-green-300">Cerrar y volver</button>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="text-center py-8 text-slate-500 text-sm">
+        <p>Material didáctico creado por Pablo Camacho Carrellán.</p>
+    </footer>
+
+    <script>
+        function createConfetti() {
+            const colors = ['#ff0', '#f00', '#0f0', '#00f', '#f0f', '#0ff'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.top = '-10px';
+                document.getElementById('prizeSection').appendChild(confetti);
+            }
+        }
+
+        function checkSQL() {
+            const input = document.getElementById('sqlInput').value;
+            const feedback = document.getElementById('feedback');
+            
+            // Clean input: remove extra spaces, new lines, case insensitive
+            const cleanInput = input.trim().replace(/\s+/g, ' ').toUpperCase();
+            
+            // Expected Logic: SELECT Nombre FROM TBL_Clientes WHERE Ciudad = 'Valencia'
+            // We check for key components rather than exact string match to allow some flexibility
+            
+            const hasSelect = cleanInput.includes("SELECT");
+            const hasNombre = cleanInput.includes("NOMBRE");
+            const hasFrom = cleanInput.includes("FROM");
+            const hasTable = cleanInput.includes("TBL_CLIENTES");
+            const hasWhere = cleanInput.includes("WHERE");
+            const hasCity = cleanInput.includes("CIUDAD");
+            const hasEqual = cleanInput.includes("=");
+            
+            // Check for Valencia with single or double quotes, simple regex
+            const hasValencia = /['"]VALENCIA['"]/i.test(cleanInput);
+
+            if (hasSelect && hasNombre && hasFrom && hasTable && hasWhere && hasCity && hasEqual && hasValencia) {
+                feedback.innerText = "";
+                showPrize();
+            } else {
+                // Simple error handling feedback
+                if (!hasSelect) feedback.innerText = "Error: Falta la instrucción SELECT.";
+                else if (!hasFrom) feedback.innerText = "Error: Falta la instrucción FROM.";
+                else if (!hasTable) feedback.innerText = "Error: Nombre de tabla incorrecto.";
+                else if (!hasWhere) feedback.innerText = "Error: Falta la condición WHERE.";
+                else if (!hasValencia) feedback.innerText = "Error: Revisa la condición de la ciudad (comillas).";
+                else feedback.innerText = "Error de Sintaxis SQL. Revisa los nombres de los campos.";
+                
+                // Shake effect on textarea
+                const area = document.getElementById('sqlInput');
+                area.classList.add('border-red-500');
+                setTimeout(() => area.classList.remove('border-red-500'), 500);
+            }
+        }
+
+        function showPrize() {
+            const prizeModal = document.getElementById('prizeSection');
+            prizeModal.classList.add('show-prize');
+            createConfetti();
+        }
+
+        function closePrize() {
+            const prizeModal = document.getElementById('prizeSection');
+            prizeModal.classList.remove('show-prize');
+            // Remove confetti to save memory
+            const confettis = document.querySelectorAll('.confetti');
+            confettis.forEach(c => c.remove());
+        }
+    </script>
+</body>
+</html>
